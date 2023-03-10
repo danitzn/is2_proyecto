@@ -9,10 +9,12 @@
     <h1 class="login-title">Login</h1>
     <form class="login-form" method="post">
         {% csrf_token %}
-        <label for="{{ form.username.id_for_label }}">Username:</label>
+        <label for="{{ form.email.id_for_label }}">Username:</label>
         {{ form.username }}
+        {{ form.username.errors }}
         <label for="{{ form.password.id_for_label }}">Password:</label>
         {{ form.password }}
+        {{ form.password.errors }}
         <button class="login-submit" type="submit">Login</button>
     </form>
 </body>

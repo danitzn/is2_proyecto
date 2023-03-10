@@ -1,0 +1,50 @@
+{% block content %}
+  <h1>Bienvenido al Sistema de Gestión de Proyectos Ágiles</h1>
+  
+  <h2>Tus Proyectos</h2>
+  {% if proyectos %}
+    <ul>
+    {% for proyecto in proyectos %}
+      <li>{{ proyecto.nombre }}</li>
+    {% endfor %}
+    </ul>
+  {% else %}
+    <p>No tienes proyectos aún.</p>
+  {% endif %}
+  
+  <h2>Tus Tareas</h2>
+  
+  <h3>Pendientes</h3>
+  {% if tareas_pendientes %}
+    <ul>
+    {% for tarea in tareas_pendientes %}
+      <li>{{ tarea.nombre }}</li>
+    {% endfor %}
+    </ul>
+  {% else %}
+    <p>No tienes tareas pendientes.</p>
+  {% endif %}
+  
+  <h3>En Proceso</h3>
+  {% if tareas_en_proceso %}
+    <ul>
+    {% for tarea in tareas_en_proceso %}
+      <li>{{ tarea.nombre }}</li>
+    {% endfor %}
+    </ul>
+  {% else %}
+    <p>No tienes tareas en proceso.</p>
+  {% endif %}
+  
+  <h3>Terminadas</h3>
+  {% if tareas_terminadas %}
+    <ul>
+    {% for tarea in tareas_terminadas %}
+      <li>{{ tarea.nombre }}</li>
+    {% endfor %}
+    </ul>
+  {% else %}
+    <p>No tienes tareas terminadas.</p>
+  {% endif %}
+  
+{% endblock %}
