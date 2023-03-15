@@ -1,0 +1,140 @@
+{% block content %}
+
+<div class="container">
+
+  <h1 class="dashboard-title">Inicio</h1>
+
+  <p class="dashboard-subtitle">Bienvenido(a), {{ request.user.username }}!</p>
+
+  <ul class="dashboard-list">
+    <li>
+      <h3>Proyectos</h3>
+      {% if proyectos %}
+      <ul>
+        {% for proyecto in proyectos %}
+        <li>{{ proyecto.nombre }}</li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <li>No tienes proyectos aún.</li>
+      {% endif %}
+    </li>
+    <li>
+      <h3>Tareas pendientes</h3>
+      {% if tareas_pendientes %}
+      <ul>
+        {% for tarea in tareas_pendientes %}
+        <li>{{ tarea.descripcion }}</li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <li>No tienes tareas pendientes.</li>
+      {% endif %}
+    </li>
+    <li>
+      <h3>Tareas en proceso</h3>
+      {% if tareas_en_proceso %}
+      <ul>
+        {% for tarea in tareas_en_proceso %}
+        <li>{{ tarea.descripcion }}</li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <li>No tienes tareas en proceso.</li>
+      {% endif %}
+    </li>
+    <li>
+      <h3>Tareas terminadas</h3>
+      {% if tareas_terminadas %}
+      <ul>
+        {% for tarea in tareas_terminadas %}
+        <li>{{ tarea.descripcion }}</li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <li>No tienes tareas terminadas.</li>
+      {% endif %}
+    </li>
+  </ul>
+
+  <a href="" class="dashboard-link">Cerrar sesión</a>
+
+</div>
+
+{% endblock %}
+
+
+{% block css %}
+  <style>
+  body {
+    background-color: #f5f5f5;
+    font-family: Arial, sans-serif;
+    font-size: 1rem;
+  }
+
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+    background-color: #fff;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .dashboard-title {
+    font-size: 2.5rem;
+    margin-top: 0;
+    text-align: center;
+    color: #007bff;
+  }
+
+  .dashboard-subtitle {
+    font-size: 1.5rem;
+    margin-top: 2rem;
+    text-align: center;
+  }
+
+  .dashboard-list {
+    margin-top: 2rem;
+  }
+
+  .dashboard-list li {
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    border: 1px solid #007bff;
+    border-radius: 5px;
+    background-color: #f5f5f5;
+  }
+
+  .dashboard-list h3 {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+  }
+
+  .dashboard-list p {
+    margin: 0;
+  }
+
+  .dashboard-list ul {
+    list-style: none;
+    padding-left: 0;
+  }
+
+  .dashboard-list li:hover {
+    background-color: #007bff;
+    color: #fff;
+  }
+
+  .dashboard-link {
+    display: block;
+    margin-top: 2rem;
+    text-align: center;
+    font-size: 1.2rem;
+    color: #007bff;
+    text-decoration: none;
+  }
+
+  .dashboard-link:hover {
+    color: #0056b3;
+  }
+  </style>
+{% endblock %}

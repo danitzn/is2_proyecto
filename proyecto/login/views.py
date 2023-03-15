@@ -1,10 +1,15 @@
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login
-from django.contrib.auth.decorators import login_required
-from django.utils.decorators import method_decorator
-from django.views.generic import TemplateView, FormView
-from .models import Project
-from .models import Task
+from django.views.generic import FormView
+from django.urls import reverse
+from django.urls import reverse_lazy
+from django.views.generic import ListView
+from django.views.generic import CreateView
+from django.views.generic import UpdateView
+from django.views.generic import DeleteView
+from .models import User
+from .forms import UserForm
+
 import logging
 
 # Create your views here.
@@ -25,19 +30,30 @@ class LoginView(FormView):
         return super().form_invalid(form)
 
     def get_success_url(self):
-        return '/dashboard'
+        return reverse('dashboard')
+    
+
+class UserListView(ListView):
+    model = User
+    template_name = 'user_list.html'
+    context_object_name = 'users'
 
 
-@method_decorator(login_required, name='dispatch')
-class DashboardView(TemplateView):
-    template_name = "dashboard.html"
+class UserCreateView(CreateView):
+    model = User
+    template_name = 'user_form.html'
+    form_class = UserForm
+    success_url = reverse_lazy('user_list')
 
-    def get_context_data(self, **kwargs):
-        context = super(DashboardView, self).get_context_data(**kwargs)
 
-        context['proyectos'] = Project.objects.filter(usuario=self.request.user.id)
-        context['tareas_pendientes'] = Task.objects.filter(usuario=self.request.user.id, estado='pendiente')
-        context['tareas_en_proceso'] = Task.objects.filter(usuario=self.request.user.id, estado='en_proceso')
-        context['tareas_terminadas'] = Task.objects.filter(usuario=self.request.user.id, estado='terminada')
+class UserUpdateView(UpdateView):
+    model = User
+    template_name = 'user_form.html'
+    form_class = UserForm
+    success_url = reverse_lazy('user_list')
 
-        return context
+
+class UserDeleteView(DeleteView):
+    model = User
+    template_name = 'user_confirm_delete.html'
+    success_url = reverse_lazy('user_list')
