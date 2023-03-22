@@ -15,12 +15,11 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-1v7qw#bz0x*1y23ng2xlzae)l1me6)i@z4wdt8u4_!69qfy4vq'
+SECRET_KEY = 'django-insecure-eklb!*88@8g566-&)x6!0ls=*+)3gs$yl!7^a0zzlvae8=f2!w'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -37,8 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'login',
-    'dashboard'
+    'gestor'
 ]
 
 MIDDLEWARE = [
@@ -85,14 +83,13 @@ WSGI_APPLICATION = 'proyecto.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'is2',
+        'NAME': 'is_2',
         'USER': 'postgres',
-        'PASSWORD': 'postgres',
+        'PASSWORD': 'password',
         'HOST': 'localhost',
         'PORT': '5432',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -134,4 +131,3 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-LOGIN_REDIRECT_URL = '/'

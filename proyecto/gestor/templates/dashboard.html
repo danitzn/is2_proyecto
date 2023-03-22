@@ -9,55 +9,49 @@
   <ul class="dashboard-list">
     <li>
       <h3>Proyectos</h3>
-      {% if proyectos %}
       <ul>
         {% for proyecto in proyectos %}
-        <li>{{ proyecto.nombre }}</li>
+          <li>{{ proyecto.nombre }}</li>
+        {% empty %}
+          <li>No hay proyectos disponibles</li>
         {% endfor %}
       </ul>
-      {% else %}
-      <li>No tienes proyectos aún.</li>
-      {% endif %}
     </li>
     <li>
-      <h3>Tareas pendientes</h3>
-      {% if tareas_pendientes %}
+      <h3>User stories</h3>
+      <h3>Por hacer</h3>
       <ul>
-        {% for tarea in tareas_pendientes %}
-        <li>{{ tarea.descripcion }}</li>
+        {% for user_story in user_stories_hacer %}
+          <li>{{ user_story.nombre }}</li>
+        {% empty %}
+          <li>No hay user stories por hacer</li>
         {% endfor %}
       </ul>
-      {% else %}
-      <li>No tienes tareas pendientes.</li>
-      {% endif %}
+    
+    <li>
+      <h3>En proceso</h3>
+      <ul>
+        {% for user_story in user_stories_proceso %}
+          <li>{{ user_story.nombre }}</li>
+        {% empty %}
+          <li>No hay user stories en proceso</li>
+        {% endfor %}
+      </ul>
     </li>
     <li>
-      <h3>Tareas en proceso</h3>
-      {% if tareas_en_proceso %}
+      <h3>Terminadas</h3>
       <ul>
-        {% for tarea in tareas_en_proceso %}
-        <li>{{ tarea.descripcion }}</li>
+        {% for user_story in user_stories_terminado %}
+          <li>{{ user_story.nombre }}</li>
+        {% empty %}
+          <li>No hay user stories terminadas</li>
         {% endfor %}
       </ul>
-      {% else %}
-      <li>No tienes tareas en proceso.</li>
-      {% endif %}
-    </li>
-    <li>
-      <h3>Tareas terminadas</h3>
-      {% if tareas_terminadas %}
-      <ul>
-        {% for tarea in tareas_terminadas %}
-        <li>{{ tarea.descripcion }}</li>
-        {% endfor %}
-      </ul>
-      {% else %}
-      <li>No tienes tareas terminadas.</li>
-      {% endif %}
     </li>
   </ul>
-
+</li>
   <a href="" class="dashboard-link">Cerrar sesión</a>
+  <a href="{% url 'usuario_list' %}" class="dashboard-link">Usuarios</a>
 
 </div>
 
