@@ -5,7 +5,7 @@ from .models import Rol
 from .models import UsuProyRol
 from .models import Estados
 from .models import UserStory
-from .models import User
+from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
@@ -25,7 +25,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import DetailView
 from .forms import UsuarioCreationForm
 from .forms import UsuarioChangeForm
-from django.contrib.auth.models import User as AuthUser
 
 
 # Create your views here.
@@ -80,9 +79,9 @@ class UsuarioListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['usuarios'] = AuthUser.objects.all()
+        context['usuarios'] = User.objects.all()
         print('-------usuarios----------')
-        print(AuthUser.objects.all())
+        print(User.objects.all())
         return context
 
 @method_decorator(login_required, name='dispatch')

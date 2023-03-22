@@ -9,12 +9,14 @@ from .views import (
     UsuarioListView,
 )
 
+app_name = 'usuarios'
+
 urlpatterns = [
     path('', LoginView.as_view(), name='login'),
     path('dashboard', DashboardView.as_view(), name='dashboard'),
-    path('nuevo/', UsuarioCreateView.as_view(), name='usuario_create'),
-    path('<int:pk>/editar/', UsuarioUpdateView.as_view(), name='usuario_update'),
-    path('<int:pk>/eliminar/', UsuarioDeleteView.as_view(), name='usuario_delete'),
-    path('<int:pk>/', UsuarioDetailView.as_view(), name='usuario_detail'),
+    path('usuarios/nuevo/', UsuarioCreateView.as_view(), name='usuario_create'),
+    path('usuarios/<int:pk>/editar/', UsuarioUpdateView.as_view(), name='usuario_update'),
+    path('usuarios/<int:pk>/eliminar/', UsuarioDeleteView.as_view(), name='usuario_delete'),
+    path('usuarios/<int:pk>/', UsuarioDetailView.as_view(), name='usuario_detail'),
     path('usuarios/', UsuarioListView.as_view(), name='usuario_list'),
 ]
