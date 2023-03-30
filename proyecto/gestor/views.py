@@ -46,27 +46,27 @@ class LoginView(FormView):
         return super().form_invalid(form)
 
     def get_success_url(self):
-        return reverse('dashboard')
+        return reverse('gestor:dashboard')
     
 
 class UsuarioCreateView(LoginRequiredMixin, CreateView):
     model = User
     form_class = UsuarioCreationForm
     template_name = 'usuario_create.html'
-    success_url = reverse_lazy('usuarios:usuario_list')
+    success_url = reverse_lazy('gestor:usuario_list')
 
 
 class UsuarioUpdateView(LoginRequiredMixin, UpdateView):
     model = User
     form_class = UsuarioChangeForm
     template_name = 'usuario_update.html'
-    success_url = reverse_lazy('usuarios:usuario_list')
+    success_url = reverse_lazy('gestor:usuario_list')
 
 
 class UsuarioDeleteView(LoginRequiredMixin, DeleteView):
     model = User
     template_name = 'usuario_delete.html'
-    success_url = reverse_lazy('usuarios:usuario_list')
+    success_url = reverse_lazy('gestor:usuario_list')
 
 
 class UsuarioDetailView(LoginRequiredMixin, DetailView):

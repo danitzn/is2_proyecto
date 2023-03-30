@@ -8,6 +8,8 @@
         <p><strong>Apellido:</strong> {{ object.last_name }}</p>
         <p><strong>Fecha de inicio:</strong> {{ object.date_joined }}</p>
     </div>
+    <a href="{% url 'gestor:usuario_list' %}" class="usuario-link">Volver al listado</a>
+    <a href="{% url 'gestor:usuario_update' object.pk %}" class="usuario-link">Editar</a>
     
   </div>
 

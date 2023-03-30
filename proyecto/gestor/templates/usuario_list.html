@@ -11,7 +11,7 @@
     <tbody>
       {% for usuario in usuarios %}
           <tr>
-              <td><a href="{% url 'usuario_detail' usuario.pk %}">{{ usuario.email }}</a></td>
+              <td><a href="{% url 'gestor:usuario_detail' usuario.pk %}">{{ usuario.email }}</a></td>
               <td>{{ usuario.first_name }}</td>
               <td>{{ usuario.last_name }}</td>
           </tr>
@@ -22,7 +22,7 @@
       {% endfor %}
     </tbody>
   </table>
-  <a href="{% url 'usuario_create' %}" class="dashboard-link">Crear usuario</a>
+  <a href="{% url 'gestor:usuario_create' %}" class="dashboard-link">Crear usuario</a>
 {% endblock %}
 
 {% block css %}
