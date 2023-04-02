@@ -1,5 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models.signals import post_migrate
+from django.dispatch import receiver
+import os
 
 
 # Create your models here.
@@ -21,10 +24,15 @@ class Sprint(models.Model):
     
 
 class Rol(models.Model):
-    descripcion = models.CharField(max_length=500)
+    ROLES= (
+        ('scrum_master', 'Scrum Master'),
+        ('product_owner', 'Product Owner'),
+        ('team_member', 'Team Member'),
+    )
+    descripcion = models.CharField(max_length=500, choices=ROLES)
 
     def __str__(self):
-        return self.nombre
+        return self.descripcion
     
 
 class UsuProyRol(models.Model):
@@ -58,3 +66,16 @@ class UserStory(models.Model):
     def __str__(self):
         return self.nombre
 
+@receiver(post_migrate)
+def create_roles(sender, **kwargs):
+    if not os.environ.get('ROLES_CREATED'):
+        if not Rol.objects.filter(descripcion='Scrum Master').exists():
+            Rol.objects.create(descripcion='Scrum Master')
+        
+        if not Rol.objects.filter(descripcion='Product Owner').exists():
+            Rol.objects.create(descripcion='Product Owner')
+        
+        if not Rol.objects.filter(descripcion='Team Member').exists():
+            Rol.objects.create(descripcion='Team Member')
+        
+        os.environ['ROLES_CREATED'] = 'True'

@@ -15,6 +15,7 @@
         {% empty %}
           <li>No hay proyectos disponibles</li>
         {% endfor %}
+        <a href="{% url 'gestor:proyecto_create' %}" class="dashboard-link">Crear proyecto</a>
       </ul>
     </li>
     <li>
@@ -50,7 +51,7 @@
     </li>
   </ul>
 </li>
-  <a href="" class="dashboard-link">Cerrar sesión</a>
+  <a href="#" onclick="logout_view()" class="dashboard-link">Cerrar sesión</a>
   <a href="{% url 'gestor:usuario_list' %}" class="dashboard-link">Usuarios</a>
 
 </div>

@@ -1,0 +1,107 @@
+{% block content %}
+<div class="container">
+  <h1>Crear Proyecto</h1>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <h2>Asignar usuarios y roles</h2>
+    {{ asignar_form.as_p }}
+    <input type="submit" value="Crear">
+  </form>
+  <a href="{% url 'gestor:dashboard' %}" class="usuario-link">Volver al listado de proyectos</a>
+</div>
+
+{% block css %}
+<style>
+  body {
+    background-color: #f5f5f5;
+    font-family: Arial, sans-serif;
+    font-size: 1rem;
+  }
+
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+    background-color: #fff;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .form-title {
+    font-size: 2.5rem;
+    margin-top: 0;
+    text-align: center;
+    color: #007bff;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    max-width: 500px;
+    margin: 0 auto;
+    margin-top: 2rem;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+  }
+
+  label {
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    color: #666;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="password"] {
+    padding: 0.5rem;
+    font-size: 1rem;
+    border-radius: 5px;
+    border: none;
+    background-color: #f5f5f5;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+  }
+
+  input[type="text"]:focus,
+  input[type="email"]:focus,
+  input[type="password"]:focus {
+    outline: none;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  }
+
+  button[type="submit"] {
+    margin-top: 1rem;
+    padding: 0.5rem;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 5px;
+    border: none;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+  }
+
+  button[type="submit"]:hover {
+    background-color: #0056b3;
+  }
+  .usuario-link {
+    display: block;
+    margin-top: 2rem;
+    text-align: center;
+    font-size: 1.2rem;
+    color: #007bff;
+    text-decoration: none;
+  }
+
+  .usuario-link:hover {
+    color: #0056b3;
+  }
+</style>
+
+
+{% endblock %}
+
+{% endblock %}

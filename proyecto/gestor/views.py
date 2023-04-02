@@ -25,7 +25,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import DetailView
 from .forms import UsuarioCreationForm
 from .forms import UsuarioChangeForm
-
+from django.contrib.auth import logout
+from django.shortcuts import redirect
+from .forms import AsignarRolUsuarioForm
+from .forms import ProyectoCreationForm
 
 # Create your views here.
 logger = logging.getLogger(__name__)
@@ -48,7 +51,8 @@ class LoginView(FormView):
     def get_success_url(self):
         return reverse('gestor:dashboard')
     
-
+# CURD USUARIOS
+# ----------------------------------------------------------
 class UsuarioCreateView(LoginRequiredMixin, CreateView):
     model = User
     form_class = UsuarioCreationForm
@@ -83,6 +87,59 @@ class UsuarioListView(LoginRequiredMixin, ListView):
         print('-------usuarios----------')
         print(User.objects.all())
         return context
+#------------------------------------------------------------
+
+# CURD PROYECTOS
+# ----------------------------------------------------------
+class ProyectoCreateView(LoginRequiredMixin, CreateView):
+    model = Proyecto
+    form_class = ProyectoCreationForm
+    template_name = 'proyecto_create.html'
+    success_url = reverse_lazy('gestor:dashboard')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.POST:
+            context['form'] = ProyectoCreationForm(self.request.POST)
+            context['asignar_form'] = AsignarRolUsuarioForm(self.request.POST)
+        else:
+            context['form'] = ProyectoCreationForm()
+            context['asignar_form'] = AsignarRolUsuarioForm()
+        context['usuarios'] = User.objects.all()
+        context['roles'] = Rol.objects.all()
+        return context
+    
+    def form_valid(self, form):
+        context = self.get_context_data()
+        asignar_form = context['asignar_form']
+        usuarios = asignar_form.cleaned_data.get('usuarios')
+        rol = asignar_form.cleaned_data.get('rol')
+        proyecto = form.save(commit=False)
+        proyecto.usuario = self.request.user
+        proyecto.save()
+        for usuario in usuarios:
+            for i in range(4):
+                usu_proy_rol = UsuProyRol(usuario=usuario, rol=rol, proyecto=proyecto)
+                usu_proy_rol.save()
+        return super().form_valid(form)
+
+
+class ProyectoUpdateView(LoginRequiredMixin, UpdateView):
+    model = Proyecto
+    fields = ['nombre', 'descripcion']
+    template_name = 'proyecto_update.html'
+    success_url = reverse_lazy('gestor:proyecto_list')
+
+class ProyectoDeleteView(LoginRequiredMixin, DeleteView):
+    model = Proyecto
+    template_name = 'proyecto_delete.html'
+    success_url = reverse_lazy('gestor:proyecto_list')
+
+class ProyectoDetailView(LoginRequiredMixin, DetailView):
+    model = Proyecto
+    template_name = 'proyecto_detail.html'
+#------------------------------------------------------------
+
 
 @method_decorator(login_required, name='dispatch')
 class DashboardView(TemplateView):
@@ -109,6 +166,6 @@ class DashboardView(TemplateView):
         
         return context
     
-    # def logout_view(request):
-    #     logout(request)
-    #     return redirect('login')
+    def logout_view(request):
+        logout(request)
+        return redirect('login')
