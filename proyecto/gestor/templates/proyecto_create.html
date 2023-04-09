@@ -1,12 +1,26 @@
 {% block content %}
 <div class="container">
-  <h1>Crear Proyecto</h1>
+  <h1>Crear proyecto</h1>
   <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <h2>Asignar usuarios y roles</h2>
-    {{ asignar_form.as_p }}
-    <input type="submit" value="Crear">
+    <h2>Asignar usuarios y roles:</h2>
+    {% for i in "1234" %}
+      <label for="id_usuario_{{ i }}">Usuario {{ i }}:</label>
+      <select name="usuario_{{ i }}" id="id_usuario_{{ i }}">
+        {% for usuario in usuarios %}
+          <option value="{{ usuario.pk }}">{{ usuario }}</option>
+        {% endfor %}
+      </select>
+      <label for="id_rol_{{ i }}">Rol {{ i }}:</label>
+      <select name="rol_{{ i }}" id="id_rol_{{ i }}">
+        {% for rol in roles %}
+          <option value="{{ rol.pk }}">{{ rol.descripcion }}</option>
+        {% endfor %}
+      </select>
+      <br>
+    {% endfor %}
+    <input type="submit" value="Crear proyecto">
   </form>
   <a href="{% url 'gestor:dashboard' %}" class="usuario-link">Volver al listado de proyectos</a>
 </div>

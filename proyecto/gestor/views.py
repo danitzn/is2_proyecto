@@ -30,6 +30,7 @@ from django.shortcuts import redirect
 from .forms import AsignarRolUsuarioForm
 from .forms import ProyectoCreationForm
 
+
 # Create your views here.
 logger = logging.getLogger(__name__)
 
@@ -101,27 +102,29 @@ class ProyectoCreateView(LoginRequiredMixin, CreateView):
         context = super().get_context_data(**kwargs)
         if self.request.POST:
             context['form'] = ProyectoCreationForm(self.request.POST)
-            context['asignar_form'] = AsignarRolUsuarioForm(self.request.POST)
         else:
             context['form'] = ProyectoCreationForm()
-            context['asignar_form'] = AsignarRolUsuarioForm()
         context['usuarios'] = User.objects.all()
         context['roles'] = Rol.objects.all()
         return context
     
     def form_valid(self, form):
-        context = self.get_context_data()
-        asignar_form = context['asignar_form']
-        usuarios = asignar_form.cleaned_data.get('usuarios')
-        rol = asignar_form.cleaned_data.get('rol')
         proyecto = form.save(commit=False)
         proyecto.usuario = self.request.user
         proyecto.save()
-        for usuario in usuarios:
-            for i in range(4):
-                usu_proy_rol = UsuProyRol(usuario=usuario, rol=rol, proyecto=proyecto)
-                usu_proy_rol.save()
+
+        # Asignar usuarios y roles automáticamente
+        usuarios = User.objects.all()[:4] # obtener los primeros cuatro usuarios
+        roles = Rol.objects.all()[:4] # obtener los primeros cuatro roles
+        for i, (usuario, rol) in enumerate(zip(usuarios, roles)):
+            usu_proy_rol = UsuProyRol(usuario=usuario, rol=rol, proyecto=proyecto)
+            usu_proy_rol.save()
+            # actualizar el rol del usuario
+            setattr(usuario, f'rol_{i+1}', rol)
+            usuario.save()
+
         return super().form_valid(form)
+
 
 
 class ProyectoUpdateView(LoginRequiredMixin, UpdateView):
