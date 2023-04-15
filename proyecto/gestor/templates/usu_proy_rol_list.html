@@ -1,0 +1,12 @@
+{% block content %}
+<h1>Usuarios, Proyectos y Roles</h1>
+<ul>
+  {% for usu in usu_proy_rol %}
+    <li>{{ usu.usuario.username }} - {{ usu.proyecto.nombre }} - {{ usu.rol.descripcion }} <a href="{% url 'gestor:usuproyrol_update' usu.proyecto.pk usu.pk %}" class="usuario-link">Editar</a></li>
+  {% empty %}
+    <li>No hay usuarios, proyectos y roles relacionados.</li>
+  {% endfor %}
+</ul>
+
+<a href="{% url 'gestor:proyecto_detail' proyecto.pk %}" class="usuario-link">Volver al detalle del proyecto</a>
+{% endblock %}

@@ -1,4 +1,6 @@
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
+from django.views import View
 from .models import Proyecto
 from .models import Sprint
 from .models import Rol
@@ -10,7 +12,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
 from django.contrib.auth.forms import AuthenticationForm
-from .forms import UsuarioCreationForm
+from .forms import  UsuProyRolForm, UsuarioCreationForm
 from .forms import UsuarioChangeForm
 from django.contrib.auth import login
 from django.urls import reverse
@@ -27,8 +29,9 @@ from .forms import UsuarioCreationForm
 from .forms import UsuarioChangeForm
 from django.contrib.auth import logout
 from django.shortcuts import redirect
-from .forms import AsignarRolUsuarioForm
-from .forms import ProyectoCreationForm
+from .forms import ProyectoForm
+from django.shortcuts import get_object_or_404
+
 
 # Create your views here.
 logger = logging.getLogger(__name__)
@@ -91,53 +94,84 @@ class UsuarioListView(LoginRequiredMixin, ListView):
 
 # CURD PROYECTOS
 # ----------------------------------------------------------
-class ProyectoCreateView(LoginRequiredMixin, CreateView):
-    model = Proyecto
-    form_class = ProyectoCreationForm
+class ProyectoCreateView(View):
     template_name = 'proyecto_create.html'
+
+    def get(self, request):
+        proyecto_form = ProyectoForm()
+        usu_proy_rol_formset = UsuProyRolFormset()
+        return render(request, self.template_name, {'proyecto_form': proyecto_form, 'usu_proy_rol_formset': usu_proy_rol_formset})
+
+    def post(self, request):
+        proyecto_form = ProyectoForm(request.POST)
+        usu_proy_rol_formset = UsuProyRolFormset(request.POST)
+        if proyecto_form.is_valid() and usu_proy_rol_formset.is_valid():
+            proyecto = proyecto_form.save()
+            for usu_proy_rol_form in usu_proy_rol_formset:
+                usu_proy_rol = usu_proy_rol_form.save(commit=False)
+                usu_proy_rol.proyecto = proyecto
+                usu_proy_rol.save()
+            return redirect('gestor:dashboard')
+        else:
+            return render(request, self.template_name, {'proyecto_form': proyecto_form, 'usu_proy_rol_formset': usu_proy_rol_formset})
+
+
+class ProyectoUpdateView(UpdateView):
+    model = Proyecto
+    form_class = ProyectoForm
+    template_name = 'proyecto_update.html'
     success_url = reverse_lazy('gestor:dashboard')
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        if self.request.POST:
-            context['form'] = ProyectoCreationForm(self.request.POST)
-            context['asignar_form'] = AsignarRolUsuarioForm(self.request.POST)
-        else:
-            context['form'] = ProyectoCreationForm()
-            context['asignar_form'] = AsignarRolUsuarioForm()
-        context['usuarios'] = User.objects.all()
-        context['roles'] = Rol.objects.all()
-        return context
-    
-    def form_valid(self, form):
-        context = self.get_context_data()
-        asignar_form = context['asignar_form']
-        usuarios = asignar_form.cleaned_data.get('usuarios')
-        rol = asignar_form.cleaned_data.get('rol')
-        proyecto = form.save(commit=False)
-        proyecto.usuario = self.request.user
-        proyecto.save()
-        for usuario in usuarios:
-            for i in range(4):
-                usu_proy_rol = UsuProyRol(usuario=usuario, rol=rol, proyecto=proyecto)
-                usu_proy_rol.save()
-        return super().form_valid(form)
-
-
-class ProyectoUpdateView(LoginRequiredMixin, UpdateView):
-    model = Proyecto
-    fields = ['nombre', 'descripcion']
-    template_name = 'proyecto_update.html'
-    success_url = reverse_lazy('gestor:proyecto_list')
 
 class ProyectoDeleteView(LoginRequiredMixin, DeleteView):
     model = Proyecto
     template_name = 'proyecto_delete.html'
     success_url = reverse_lazy('gestor:proyecto_list')
 
-class ProyectoDetailView(LoginRequiredMixin, DetailView):
+
+class ProyectoDetailView(DetailView):
     model = Proyecto
     template_name = 'proyecto_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        usu_proy_rol = UsuProyRol.objects.filter(proyecto=self.object)
+        context['usu_proy_rol'] = usu_proy_rol
+        return context
+
+
+class UsuProyRolListView(View):
+    model = UsuProyRol
+    template_name = 'usu_proy_rol_list.html'
+
+    def get(self, request, pk):
+        proyecto = get_object_or_404(Proyecto, pk=pk)
+        usu_proy_rol = UsuProyRol.objects.filter(proyecto=proyecto)
+        return render(request, self.template_name, {'usu_proy_rol': usu_proy_rol, 'proyecto': proyecto})
+    
+
+class UsuProyRolUpdateView(UpdateView):
+    model = UsuProyRol
+    template_name = 'usu_proy_rol_update.html'
+    fields = ['rol']
+
+    def get_object(self, queryset=None):
+        # Recuperar el objeto específico que se va a editar
+        proyecto_pk = self.kwargs['pk']
+        usu_pk = self.kwargs['usu_pk']
+        obj = get_object_or_404(UsuProyRol, proyecto__pk=proyecto_pk, pk=usu_pk)
+        # Aquí puedes aplicar cualquier lógica adicional para filtrar o modificar el objeto si es necesario
+        return obj
+    
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        pk = self.object.proyecto.pk
+        success_url = reverse_lazy('gestor:proyecto_detail', kwargs={'pk': pk})
+        self.object.save()
+
+        return HttpResponseRedirect(success_url)
+    
+
 #------------------------------------------------------------
 
 

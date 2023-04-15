@@ -11,7 +11,7 @@
       <h3>Proyectos</h3>
       <ul>
         {% for proyecto in proyectos %}
-          <li>{{ proyecto.nombre }}</li>
+          <li><a href="{% url 'gestor:proyecto_detail' proyecto.pk %}">{{ proyecto.nombre }}</a></li>
         {% empty %}
           <li>No hay proyectos disponibles</li>
         {% endfor %}

@@ -13,6 +13,8 @@ from .views import (
     ProyectoUpdateView,
     ProyectoDeleteView,
     ProyectoDetailView,
+    UsuProyRolListView,
+    UsuProyRolUpdateView,
 )
 
 app_name = 'gestor'
@@ -30,4 +32,6 @@ urlpatterns = [
     path('gestor/proyectos/<int:pk>/editar/', ProyectoUpdateView.as_view(), name='proyecto_update'),
     path('gestor/proyectos/<int:pk>/eliminar/', ProyectoDeleteView.as_view(), name='proyecto_delete'),
     path('gestor/proyectos/<int:pk>/', ProyectoDetailView.as_view(), name='proyecto_detail'),
+    path('proyecto/<int:pk>/usuproyrol/', UsuProyRolListView.as_view(), name='usuproyrol_list'),
+    path('gestor/proyectos/usuarios/<int:pk>/update/<int:usu_pk>/', UsuProyRolUpdateView.as_view(), name='usuproyrol_update'),
 ]

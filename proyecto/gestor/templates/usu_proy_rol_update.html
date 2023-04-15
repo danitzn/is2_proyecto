@@ -1,0 +1,12 @@
+
+{% block content %}
+  <h1>Editar Usuario, Proyecto y Rol</h1>
+  <p>Usuario: {{ object.usuario }}</p>
+  <p>Proyecto: {{ object.proyecto }}</p>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Actualizar</button>
+    <a href="{% url 'gestor:proyecto_detail' object.proyecto.pk %}" class="usuario-link">Volver al detalle del proyecto</a>
+  </form>
+{% endblock %}

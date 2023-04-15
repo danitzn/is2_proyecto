@@ -3,6 +3,9 @@ from django.contrib.auth.models import User
 from django import forms
 from .models import Proyecto
 from .models import Rol
+from .models import UsuProyRol
+from django.forms import modelform_factory
+from django.forms import formset_factory
 
 
 # FORMS USUARIOS
@@ -20,26 +23,14 @@ class UsuarioChangeForm(UserChangeForm):
 
 # FORMS PROYECTOS
 # ----------------------------------------------------------
-class ProyectoCreationForm(forms.ModelForm):
-    class Meta:
-        model = Proyecto
-        fields = ('nombre', 'descripcion')
-        widgets = {
-            'nombre': forms.TextInput(attrs={'class': 'form-control'}),
-            'descripcion': forms.Textarea(attrs={'class': 'form-control'}),
-        }
+ProyectoForm = modelform_factory(Proyecto, fields=('nombre', 'descripcion'))
 
-class ProyectoUpdateForm(forms.ModelForm):
-    class Meta:
-        model = Proyecto
-        fields = ('nombre', 'descripcion')
-        widgets = {
-            'nombre': forms.TextInput(attrs={'class': 'form-control'}),
-            'descripcion': forms.Textarea(attrs={'class': 'form-control'}),
-        }
-# ----------------------------------------------------------
-
-class AsignarRolUsuarioForm(forms.Form):
-    usuarios = forms.ModelMultipleChoiceField(queryset=User.objects.all())
+class UsuProyRolForm(forms.ModelForm):
+    usuario = forms.ModelChoiceField(queryset=User.objects.all())
     rol = forms.ModelChoiceField(queryset=Rol.objects.all())
-    proyecto = forms.ModelChoiceField(queryset=Proyecto.objects.all())
+
+    class Meta:
+        model = UsuProyRol
+        fields = ('usuario', 'rol')
+
+# ----------------------------------------------------------
