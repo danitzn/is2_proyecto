@@ -12,7 +12,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
 from django.contrib.auth.forms import AuthenticationForm
-from .forms import  UsuProyRolForm, UsuarioCreationForm
+from .forms import  UsuProyRolForm, UsuProyRolFormset, UsuarioCreationForm
 from .forms import UsuarioChangeForm
 from django.contrib.auth import login
 from django.urls import reverse
