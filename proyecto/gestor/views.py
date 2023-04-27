@@ -1,3 +1,4 @@
+import datetime
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.views import View
@@ -12,7 +13,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
 from django.contrib.auth.forms import AuthenticationForm
-from .forms import  UsuProyRolForm, UsuProyRolFormset, UsuarioCreationForm
+from .forms import  SprintForm, UsuProyRolForm, UsuProyRolFormset, UsuarioCreationForm
 from .forms import UsuarioChangeForm
 from django.contrib.auth import login
 from django.urls import reverse
@@ -174,6 +175,71 @@ class UsuProyRolUpdateView(UpdateView):
 
 #------------------------------------------------------------
 
+# CRUD SPRINTS
+# ----------------------------------------------------------
+class SprintCreateView(View):
+    model = Sprint 
+    template_name = 'sprint_create.html'
+
+    def get(self, request, pk):
+        proyecto = get_object_or_404(Proyecto, pk=pk)
+        sprint_form = SprintForm(initial={'backlog':proyecto,'fecha_inicio': datetime.date.today(), 'fecha_fin': datetime.date.today() + datetime.timedelta(days=14), 'fecha_fin_prevista': datetime.date.today() + datetime.timedelta(days=14), 'duracion': 14})
+        return render(request, self.template_name, {'sprint_form': sprint_form, 'proyecto': proyecto})
+
+    def post(self, request, pk):
+        proyecto = get_object_or_404(Proyecto, pk=pk)
+        sprint_form = SprintForm(request.POST)
+        if sprint_form.is_valid():
+            sprint = sprint_form.save(commit=False)
+            sprint.proyecto = proyecto
+            sprint.save()
+            return redirect('gestor:proyecto_detail', pk=pk)
+        else:
+            return render(request, self.template_name, {'sprint_form': sprint_form, 'proyecto': proyecto})
+        
+
+class SprintDetailView(DetailView):
+    model = Sprint
+    template_name = 'sprint_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # user_stories = UserStory.objects.filter(sprint=self.object)
+        # context['user_stories'] = user_stories
+        proyecto = Proyecto.objects.get(pk=self.object.backlog.pk)
+        context['proyecto'] = proyecto
+        return context
+    
+
+class SprintUpdateView(UpdateView):
+    model = Sprint
+    template_name = 'sprint_update.html'
+    fields = ['fecha_inicio', 'fecha_fin', 'fecha_fin_prevista']
+
+    def get_object(self, queryset=None):
+        # Recuperar el objeto específico que se va a editar
+        proyecto_pk = self.kwargs['proyecto_pk']
+        pk = self.kwargs['pk']
+        obj = get_object_or_404(Sprint, backlog__pk=proyecto_pk, pk=pk)
+        # Aquí puedes aplicar cualquier lógica adicional para filtrar o modificar el objeto si es necesario
+        return obj
+    
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        pk = self.object.proyecto.pk
+        success_url = reverse_lazy('gestor:proyecto_detail', kwargs={'pk': pk})
+        self.object.save()
+
+        return HttpResponseRedirect(success_url)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        proyecto = Proyecto.objects.get(pk=self.object.backlog.pk)
+        context['proyecto'] = proyecto
+        return context
+
+        
+#------------------------------------------------------------
 
 @method_decorator(login_required, name='dispatch')
 class DashboardView(TemplateView):
@@ -184,7 +250,15 @@ class DashboardView(TemplateView):
         
         # Get all projects
         proyectos = Proyecto.objects.all()
+        sprints = []
+
+        for proyecto in proyectos:
+            sprint_pk = Sprint.objects.filter(backlog=proyecto.pk).order_by('-pk').first()
+            sprints.append(sprint_pk)
+
+        context['sprints'] = sprints
         context['proyectos'] = proyectos
+        context['proyectos_sprints'] = zip(proyectos, sprints)
         
         # Get all user stories
         user_stories = UserStory.objects.all()

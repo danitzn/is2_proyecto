@@ -1,11 +1,12 @@
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.contrib.auth.models import User
 from django import forms
-from .models import Proyecto
+from .models import Proyecto, Sprint
 from .models import Rol
 from .models import UsuProyRol
 from django.forms import modelform_factory
 from django.forms import formset_factory
+from django.forms.widgets import DateInput
 
 
 # FORMS USUARIOS
@@ -36,3 +37,24 @@ class UsuProyRolForm(forms.ModelForm):
 UsuProyRolFormset = formset_factory(UsuProyRolForm, extra=4)
 
 # ----------------------------------------------------------
+
+class SprintForm(forms.ModelForm):
+    backlog = forms.ModelChoiceField(queryset=Proyecto.objects.all())
+    fecha_inicio = forms.DateField(widget=DateInput(attrs={'type': 'date'}))
+    fecha_fin = forms.DateField(widget=DateInput(attrs={'type': 'date'}))
+    fecha_fin_prevista = forms.DateField(widget=DateInput(attrs={'type': 'date'}))
+    duracion = forms.IntegerField()
+
+    class Meta:
+        model = Sprint
+        fields = ('backlog', 'fecha_inicio', 'fecha_fin', 'fecha_fin_prevista', 'duracion')
+
+class SprintUpdateForm(forms.ModelForm):
+    fecha_inicio = forms.DateField(widget=DateInput(attrs={'type': 'date'}))
+    fecha_fin = forms.DateField(widget=DateInput(attrs={'type': 'date'}))
+    fecha_fin_prevista = forms.DateField(widget=DateInput(attrs={'type': 'date'}))
+    duracion = forms.IntegerField()
+
+    class Meta:
+        model = Sprint
+        fields = ('fecha_inicio', 'fecha_fin', 'fecha_fin_prevista', 'duracion')

@@ -16,11 +16,12 @@ class Proyecto(models.Model):
     
 class Sprint(models.Model):
     backlog = models.ForeignKey(Proyecto, on_delete=models.CASCADE)
+    fecha_fin_prevista = models.DateField(null=True, blank=True)
     fecha_inicio = models.DateField()
     fecha_fin = models.DateField()
 
     def __str__(self):
-        return self.nombre
+        return str(self.id)
     
 
 class Rol(models.Model):

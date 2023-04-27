@@ -10,8 +10,15 @@
     <li>
       <h3>Proyectos</h3>
       <ul>
-        {% for proyecto in proyectos %}
-          <li><a href="{% url 'gestor:proyecto_detail' proyecto.pk %}">{{ proyecto.nombre }}</a></li>
+        {% for proyecto, sprint in proyectos_sprints %}
+          <li>
+            <span><a href="{% url 'gestor:proyecto_detail' proyecto.pk %}">{{ proyecto.nombre }}</a></span>
+            {% if sprint %}
+              <span class="sprint-link-wrapper"><a href="{% url 'gestor:sprint_detail' proyecto.pk sprint.pk %}" class="sprint-link">Ver Sprint</a></span>
+            {% else %}
+              <span class="sprint-link-wrapper"><a href="{% url 'gestor:sprint_create' proyecto.pk %}" class="sprint-link">Crear Sprint</a></span>
+            {% endif %}
+          </li>
         {% empty %}
           <li>No hay proyectos disponibles</li>
         {% endfor %}
@@ -130,6 +137,14 @@
 
   .dashboard-link:hover {
     color: #0056b3;
+  }
+
+  .sprint-link-wrapper {
+    float: right;
+    margin-left: 10px;
+    font-size: 0.8rem;
+    color: #007bff;
+    text-decoration: none;
   }
   </style>
 {% endblock %}

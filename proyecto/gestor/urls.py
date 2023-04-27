@@ -16,6 +16,11 @@ from .views import (
     UsuProyRolListView,
     UsuProyRolUpdateView,
 )
+from .views import (
+    SprintCreateView,
+    SprintDetailView,
+    SprintUpdateView
+)
 
 app_name = 'gestor'
 
@@ -34,4 +39,7 @@ urlpatterns = [
     path('gestor/proyectos/<int:pk>/', ProyectoDetailView.as_view(), name='proyecto_detail'),
     path('proyecto/<int:pk>/usuproyrol/', UsuProyRolListView.as_view(), name='usuproyrol_list'),
     path('gestor/proyectos/usuarios/<int:pk>/update/<int:usu_pk>/', UsuProyRolUpdateView.as_view(), name='usuproyrol_update'),
+    path('gestor/proyectos/<int:pk>/sprint/nuevo/', SprintCreateView.as_view(), name='sprint_create'),
+    path('gestor/proyectos/<int:proyecto_pk>/sprint/<int:pk>/', SprintDetailView.as_view(), name='sprint_detail'),
+    path('gestor/proyectos/<int:proyecto_pk>/sprint/<int:pk>/editar/', SprintUpdateView.as_view(), name='sprint_update'),
 ]
