@@ -95,7 +95,7 @@ class UsuarioListView(LoginRequiredMixin, ListView):
 
 # CURD PROYECTOS
 # ----------------------------------------------------------
-class ProyectoCreateView(View):
+class ProyectoCreateView(FormView):
     template_name = 'proyecto_create.html'
 
     def get(self, request):
@@ -106,7 +106,7 @@ class ProyectoCreateView(View):
     def post(self, request):
         proyecto_form = ProyectoForm(request.POST)
         usu_proy_rol_formset = UsuProyRolFormset(request.POST)
-        if proyecto_form.is_valid() and usu_proy_rol_formset.is_valid():
+        if usu_proy_rol_formset.is_valid():
             proyecto = proyecto_form.save()
             for usu_proy_rol_form in usu_proy_rol_formset:
                 usu_proy_rol = usu_proy_rol_form.save(commit=False)

@@ -1,16 +1,64 @@
 {% block content %}
 <div class="container">
   <h1>Crear Proyecto</h1>
-  <form method="post">
-    {% csrf_token %}
-    {{ proyecto_form.as_p }}
-    {{ usu_proy_rol_formset.management_form }}
-    {% for form in usu_proy_rol_formset %}
-      {{ form.as_p }}
-    {% endfor %}
+  <form method="post"> 
+      {% csrf_token %}
+      {{ proyecto_form.as_p }}
+      {{ usu_proy_rol_formset.management_form }}
+      <div id="formNuevoUsuario"> 
+        {% for form in usu_proy_rol_formset %}
+          {{ form.as_p }}
+        {% endfor %}
+      </div>
     <button type="submit">Guardar</button>
-  </form>  
+  </form>
+  <p></p>
+  <button onclick="agregarusuario()">Add</button>
+  <p></p>
+  <button onclick="eliminarusuario()">Delete</button>
   <a href="{% url 'gestor:dashboard' %}" class="usuario-link">Volver al listado de proyectos</a>
+
+  <script>
+    function agregarusuario() {
+        var forms = document.querySelector('#id_form-TOTAL_FORMS')
+
+        //nuevo usuario
+        var nuevo_label_usuario = document.createElement('label');
+        nuevo_label_usuario.innerHTML = 'Usuario:';
+        var nuevouser = document.querySelector('#id_form-0-usuario').cloneNode( true );
+        nuevouser.name = 'form-'+forms.value+'-usuario';
+        nuevouser.id = 'id_form-'+forms.value+'-usuario';
+        
+        //nuevo rol
+        var nuevo_label_rol = document.createElement('label');
+        nuevo_label_rol.innerHTML = 'Rol:';
+        var nuevorol= document.querySelector('#id_form-0-rol').cloneNode( true );
+        nuevorol.name = 'form-'+forms.value+'-rol';
+        nuevorol.id = 'id_form-'+forms.value+'-rol';
+
+
+        //
+        document.querySelector('#formNuevoUsuario').appendChild(nuevo_label_usuario);
+        document.querySelector('#formNuevoUsuario').appendChild(nuevouser);
+        document.querySelector('#formNuevoUsuario').appendChild(nuevo_label_rol);
+        document.querySelector('#formNuevoUsuario').appendChild(nuevorol);
+        //
+        var p = document.createElement("p");
+        document.querySelector('#formNuevoUsuario').appendChild(p);
+        //
+        forms.value = parseInt(forms.value) + 1;
+    }
+    function eliminarusuario() {
+        var forms = document.querySelector('#id_form-TOTAL_FORMS');
+        forms.value = parseInt(forms.value) - 1;
+        //
+        removeInput = '#id_form-'+forms.value+'-usuario';
+        removeSelect = '#id_form-'+forms.value+'-rol';
+        document.querySelector(removeInput).remove();
+        document.querySelector(removeSelect).remove();
+    }
+</script>
+
 </div>
 
 {% block css %}

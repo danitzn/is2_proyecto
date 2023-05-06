@@ -34,7 +34,7 @@ class UsuProyRolForm(forms.ModelForm):
         model = UsuProyRol
         fields = ('usuario', 'rol')
 
-UsuProyRolFormset = formset_factory(UsuProyRolForm, extra=4)
+UsuProyRolFormset = formset_factory(UsuProyRolForm, extra=3)
 
 # ----------------------------------------------------------
 
