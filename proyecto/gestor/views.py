@@ -34,6 +34,7 @@ from .forms import ProyectoForm
 from django.shortcuts import get_object_or_404
 
 
+
 # Create your views here.
 logger = logging.getLogger(__name__)
 
@@ -98,26 +99,34 @@ class UsuarioListView(LoginRequiredMixin, ListView):
 class ProyectoCreateView(FormView):
     template_name = 'proyecto_create.html'
 
-    def get(self, request):
-        proyecto_form = ProyectoForm()
-        usu_proy_rol_formset = UsuProyRolFormset()
-        return render(request, self.template_name, {'proyecto_form': proyecto_form, 'usu_proy_rol_formset': usu_proy_rol_formset})
-
-    def post(self, request):
-        proyecto_form = ProyectoForm(request.POST)
-        usu_proy_rol_formset = UsuProyRolFormset(request.POST)
-        if usu_proy_rol_formset.is_valid():
-            proyecto = proyecto_form.save()
-            for usu_proy_rol_form in usu_proy_rol_formset:
-                usu_proy_rol = usu_proy_rol_form.save(commit=False)
-                usu_proy_rol.proyecto = proyecto
-                usu_proy_rol.save()
-            return redirect('gestor:dashboard')
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.POST:
+            context['form'] = ProyectoCreationForm(self.request.POST)
+            context['asignar_form'] = AsignarRolUsuarioForm(self.request.POST)
         else:
-            return render(request, self.template_name, {'proyecto_form': proyecto_form, 'usu_proy_rol_formset': usu_proy_rol_formset})
+            context['form'] = ProyectoCreationForm()
+            context['asignar_form'] = AsignarRolUsuarioForm()
+        context['usuarios'] = User.objects.all()
+        context['roles'] = Rol.objects.all()
+        return context
+    
+    def form_valid(self, form):
+        context = self.get_context_data()
+        asignar_form = context['asignar_form']
+        usuarios = asignar_form.cleaned_data.get('usuarios')
+        rol = asignar_form.cleaned_data.get('rol')
+        proyecto = form.save(commit=False)
+        proyecto.usuario = self.request.user
+        proyecto.save()
+        for usuario in usuarios:
+            for i in range(4):
+                usu_proy_rol = UsuProyRol(usuario=usuario, rol=rol, proyecto=proyecto)
+                usu_proy_rol.save()
+        return super().form_valid(form)
 
 
-class ProyectoUpdateView(UpdateView):
+class ProyectoUpdateView(LoginRequiredMixin, UpdateView):
     model = Proyecto
     form_class = ProyectoForm
     template_name = 'proyecto_update.html'

@@ -1,16 +1,12 @@
 {% block content %}
 <div class="container">
   <h1>Crear Proyecto</h1>
-  <form method="post"> 
-      {% csrf_token %}
-      {{ proyecto_form.as_p }}
-      {{ usu_proy_rol_formset.management_form }}
-      <div id="formNuevoUsuario"> 
-        {% for form in usu_proy_rol_formset %}
-          {{ form.as_p }}
-        {% endfor %}
-      </div>
-    <button type="submit">Guardar</button>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <h2>Asignar usuarios y roles</h2>
+    {{ asignar_form.as_p }}
+    <input type="submit" value="Crear">
   </form>
   <p></p>
   <button onclick="agregarusuario()">Add</button>
