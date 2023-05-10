@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import DashboardView, UserStoryCreateView
+from .views import DashboardView
 from .views import LoginView
 from .views import (
     UsuarioCreateView,
@@ -19,7 +19,11 @@ from .views import (
 from .views import (
     UserStoryCreateView,
     UserStoryListDetailView,
+    SprintCreateView,
+    SprintDetailView,
+    SprintUpdateView
 )
+
 app_name = 'gestor'
 
 
@@ -39,4 +43,7 @@ urlpatterns = [
     path('gestor/proyectos/usuarios/<int:pk>/update/<int:usu_pk>/', UsuProyRolUpdateView.as_view(), name='usuproyrol_update'),
     path('gestor/user_storys/nuevo/', UserStoryCreateView.as_view(), name='user_story_create'),
     path('gestor/user_storys/<int:pk>/', UserStoryListDetailView.as_view(), name='user_story_detail'),
+    path('gestor/proyectos/<int:pk>/sprint/nuevo/', SprintCreateView.as_view(), name='sprint_create'),
+    path('gestor/proyectos/<int:proyecto_pk>/sprint/<int:pk>/', SprintDetailView.as_view(), name='sprint_detail'),
+    path('gestor/proyectos/<int:proyecto_pk>/sprint/<int:pk>/editar/', SprintUpdateView.as_view(), name='sprint_update'),
 ]
