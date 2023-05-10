@@ -17,6 +17,8 @@ from .views import (
     UsuProyRolUpdateView,
 )
 from .views import (
+    UserStoryCreateView,
+    UserStoryListDetailView,
     SprintCreateView,
     SprintDetailView,
     SprintUpdateView
@@ -39,6 +41,8 @@ urlpatterns = [
     path('gestor/proyectos/<int:pk>/', ProyectoDetailView.as_view(), name='proyecto_detail'),
     path('proyecto/<int:pk>/usuproyrol/', UsuProyRolListView.as_view(), name='usuproyrol_list'),
     path('gestor/proyectos/usuarios/<int:pk>/update/<int:usu_pk>/', UsuProyRolUpdateView.as_view(), name='usuproyrol_update'),
+    path('gestor/user_storys/nuevo/', UserStoryCreateView.as_view(), name='user_story_create'),
+    path('gestor/user_storys/<int:pk>/', UserStoryListDetailView.as_view(), name='user_story_detail'),
     path('gestor/proyectos/<int:pk>/sprint/nuevo/', SprintCreateView.as_view(), name='sprint_create'),
     path('gestor/proyectos/<int:proyecto_pk>/sprint/<int:pk>/', SprintDetailView.as_view(), name='sprint_detail'),
     path('gestor/proyectos/<int:proyecto_pk>/sprint/<int:pk>/editar/', SprintUpdateView.as_view(), name='sprint_update'),

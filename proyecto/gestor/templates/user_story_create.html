@@ -1,0 +1,8 @@
+<!-- user_story_create.html -->
+
+<form method="POST">
+    {% csrf_token %}
+    {{ user_story_form.as_p }}
+    <button type="submit">Crear User Story</button>
+  </form>
+  

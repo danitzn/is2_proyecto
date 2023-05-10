@@ -1,7 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.contrib.auth.models import User
 from django import forms
-from .models import Proyecto, Sprint
+from .models import Estados, Proyecto, Sprint, UserStory
 from .models import Rol
 from .models import UsuProyRol
 from django.forms import modelform_factory
@@ -37,6 +37,16 @@ class UsuProyRolForm(forms.ModelForm):
 UsuProyRolFormset = formset_factory(UsuProyRolForm, extra=3)
 
 # ----------------------------------------------------------
+# FORMS USER STORY
+# ----------------------------------------------------------
+class UserStoryForm(forms.ModelForm):
+    sprint = forms.ModelChoiceField(queryset=Sprint.objects.all())
+    estado = forms.ModelChoiceField(queryset=Estados.objects.all())
+    class Meta:
+        model = UserStory
+        fields = ('nombre', 'descripcion','sprint','estado')
+    UserStoryFormset = formset_factory(UserStory, extra=4)
+
 
 class SprintForm(forms.ModelForm):
     backlog = forms.ModelChoiceField(queryset=Proyecto.objects.all())

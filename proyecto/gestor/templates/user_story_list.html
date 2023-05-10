@@ -1,0 +1,28 @@
+<!-- user_story_list.html -->
+
+<h2>User Stories en estado "Hacer"</h2>
+<ul>
+  {% for user_story in user_stories_hacer %}
+    <li>{{ user_story }}</li>
+  {% empty %}
+    <li>No hay User Stories en estado "Hacer".</li>
+  {% endfor %}
+</ul>
+
+<h2>User Stories en estado "Proceso"</h2>
+<ul>
+  {% for user_story in user_stories_proceso %}
+    <li>{{ user_story }}</li>
+  {% empty %}
+    <li>No hay User Stories en estado "Proceso".</li>
+  {% endfor %}
+</ul>
+
+<h2>User Stories en estado "Terminado"</h2>
+<ul>
+  {% for user_story in user_stories_terminado %}
+    <li>{{ user_story }}</li>
+  {% empty %}
+    <li>No hay User Stories en estado "Terminado".</li>
+  {% endfor %}
+</ul>
