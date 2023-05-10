@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import DashboardView
+from .views import DashboardView, UserStoryCreateView
 from .views import LoginView
 from .views import (
     UsuarioCreateView,
@@ -16,7 +16,10 @@ from .views import (
     UsuProyRolListView,
     UsuProyRolUpdateView,
 )
-
+from .views import (
+    UserStoryCreateView,
+    UserStoryListDetailView,
+)
 app_name = 'gestor'
 
 
@@ -34,4 +37,6 @@ urlpatterns = [
     path('gestor/proyectos/<int:pk>/', ProyectoDetailView.as_view(), name='proyecto_detail'),
     path('proyecto/<int:pk>/usuproyrol/', UsuProyRolListView.as_view(), name='usuproyrol_list'),
     path('gestor/proyectos/usuarios/<int:pk>/update/<int:usu_pk>/', UsuProyRolUpdateView.as_view(), name='usuproyrol_update'),
+    path('gestor/user_storys/nuevo/', UserStoryCreateView.as_view(), name='user_story_create'),
+    path('gestor/user_storys/<int:pk>/', UserStoryListDetailView.as_view(), name='user_story_detail'),
 ]

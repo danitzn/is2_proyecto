@@ -1,7 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.contrib.auth.models import User
 from django import forms
-from .models import Proyecto
+from .models import Proyecto, UserStory
 from .models import Rol
 from .models import UsuProyRol
 from django.forms import modelform_factory
@@ -36,3 +36,10 @@ class UsuProyRolForm(forms.ModelForm):
 UsuProyRolFormset = formset_factory(UsuProyRolForm, extra=4)
 
 # ----------------------------------------------------------
+# FORMS USER STORY
+# ----------------------------------------------------------
+class UserStoryForm(forms.ModelForm):
+    class Meta:
+        model = UserStory
+        fields = ('nombre', 'descripcion','sprint','estado')
+    UserStoryFormset = formset_factory(UserStory, extra=4)
