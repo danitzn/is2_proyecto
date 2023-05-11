@@ -80,3 +80,17 @@ def create_roles(sender, **kwargs):
             Rol.objects.create(descripcion='Team Member')
         
         os.environ['ROLES_CREATED'] = 'True'
+
+@receiver(post_migrate)
+def create_estados(sender, **kwargs):
+    if not os.environ.get('ESTADOS_CREATED'):
+        if not Estados.objects.filter(estado='hacer').exists():
+            Estados.objects.create(estado='hacer')
+        
+        if not Estados.objects.filter(estado='proceso').exists():
+            Estados.objects.create(estado='proceso')
+        
+        if not Estados.objects.filter(estado='terminado').exists():
+            Estados.objects.create(estado='terminado')
+        
+        os.environ['ESTADOS_CREATED'] = 'True'
