@@ -262,11 +262,15 @@ class DashboardView(TemplateView):
 
         # Get all user stories
         user_stories = UserStory.objects.all()
+
+        # Get all estados
+        estados = Estados.objects.all()
         
         # Filter user stories by estado
-        user_stories_hacer = user_stories.filter(estado__estado='hacer')
-        user_stories_proceso = user_stories.filter(estado__estado='proceso')
-        user_stories_terminado = user_stories.filter(estado__estado='terminado')
+        user_stories_hacer = user_stories.filter(estado=estados.get(estado='hacer'))
+        user_stories_proceso = user_stories.filter(estado=estados.get(estado='proceso'))
+        user_stories_terminado = user_stories.filter(estado=estados.get(estado='terminado'))
+        
         
         context['user_stories_hacer'] = user_stories_hacer
         context['user_stories_proceso'] = user_stories_proceso
