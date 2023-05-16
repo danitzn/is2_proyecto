@@ -204,10 +204,12 @@ class SprintDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # user_stories = UserStory.objects.filter(sprint=self.object)
-        # context['user_stories'] = user_stories
+        user_stories = UserStory.objects.filter(sprint=self.object)
+        context['user_stories'] = user_stories
         proyecto = Proyecto.objects.get(pk=self.object.backlog.pk)
         context['proyecto'] = proyecto
+        print (user_stories)
+        print ('----------')
         return context
     
 
@@ -258,8 +260,7 @@ class DashboardView(TemplateView):
 
         context['sprints'] = sprints
         context['proyectos'] = proyectos
-        context['proyectos_sprints'] = zip(proyectos, sprints)
-
+        context['proyectos_sprints']      = zip(proyectos, sprints)
         # Get all user stories
         user_stories = UserStory.objects.all()
 

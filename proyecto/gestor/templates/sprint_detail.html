@@ -21,17 +21,40 @@
     <div class="col-md-6">
       <h2 class="form-subtitle">Users Stories</h2>
       <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>US</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>User Storie</td>
-          </tr>
-        </tbody>
-      </table>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>US</th>
+              <th>Nombre</th>
+              <th>Descripción</th>
+              <th>Estado</th>
+            </tr>
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Nombre</th>
+                  <th>Descripción</th>
+                  <th>Estado</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for user_story in user_stories%}
+                  <tr>
+                    <td>{{ user_story.id }}</td>
+                    <td>{{ user_story.nombre }}</td>
+                    <td>{{ user_story.descripcion }}</td>
+                    <td>Hacer</td>
+                  </tr>
+                {% empty %}
+                  <tr>
+                    <td colspan="4">No hay User Stories en estado "Hacer".</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+        
+
     </div>
   </div>
   <a href="{% url 'gestor:sprint_update' proyecto.pk sprint.pk%}" class="proyecto-link">Editar</a>

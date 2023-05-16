@@ -42,10 +42,11 @@ UsuProyRolFormset = formset_factory(UsuProyRolForm, extra=4)
 class UserStoryForm(forms.ModelForm):
     sprint = forms.ModelChoiceField(queryset=Sprint.objects.all())
     estado = forms.ModelChoiceField(queryset=Estados.objects.all())
+    usu_proy_rol = forms.ModelChoiceField(queryset=UsuProyRol.objects.all())
     class Meta:
         model = UserStory
-        fields = ('nombre', 'descripcion','sprint','estado')
-    UserStoryFormset = formset_factory(UserStory, extra=4)
+        fields = ('nombre', 'descripcion','usu_proy_rol','sprint','estado')
+        UserStoryFormset = formset_factory(UserStory, extra=4)
 
 
 class SprintForm(forms.ModelForm):

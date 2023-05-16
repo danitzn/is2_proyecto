@@ -10,7 +10,6 @@
     <li>
       <h3>Proyectos</h3>
       <ul>
-
         {% for proyecto, sprint in proyectos_sprints %}
           <li>
             <span><a href="{% url 'gestor:proyecto_detail' proyecto.pk %}">{{ proyecto.nombre }}</a></span>
@@ -23,59 +22,48 @@
         {% empty %}
           <li>No hay proyectos disponibles</li>
         {% endfor %}
-        <a
-        href="{% url 'gestor:proyecto_create' %}"
-        class="dashboard-link">Crear proyecto
-      </a>
+        <li>
+          <a href="{% url 'gestor:proyecto_create' %}" class="dashboard-link">Crear proyecto</a>
+        </li>
       </ul>
     </li>
     <li>
       <h3>User stories</h3>
-       <ul>
-        {% for user_story in user_stories_hacer %}
-          <li>
-            <a href="{% url 'gestor:user_story_detail' proyecto.pk %}">
-              {{ user_stories_hacer.nombre }}
-            </a>
-          </li>
-        {% empty %}
-          <li>No hay User Storys disponibles</li>
-        {% endfor %}
-        <a href="{% url 'gestor:user_story_create' %}" class="dashboard-link">
-          Crear User Story</a>
-      </ul>
-    </li>
-      <h3>Por hacer</h3>
       <ul>
-        {% for user_story in user_stories_hacer %}
-          <li>{{ user_story.nombre }}</li>
-        {% empty %}
-          <li>No hay user stories por hacer</li>
-        {% endfor %}
+        <li>
+          <h3>Por hacer</h3>
+          <ul>
+            {% for user_story in user_stories_hacer %}
+              <li>{{ user_story.nombre }}</li>
+            {% empty %}
+              <li>No hay user stories por hacer</li>
+            {% endfor %}
+          </ul>
+        </li>
+        <li>
+          <h3>En proceso</h3>
+          <ul>
+            {% for user_story in user_stories_proceso %}
+              <li>{{ user_story.nombre }}</li>
+            {% empty %}
+              <li>No hay user stories en proceso</li>
+            {% endfor %}
+          </ul>
+        </li>
+        <li>
+          <h3>Terminadas</h3>
+          <ul>
+            {% for user_story in user_stories_terminado %}
+              <li>{{ user_story.nombre }}</li>
+            {% empty %}
+              <li>No hay user stories terminadas</li>
+            {% endfor %}
+          </ul>
+        </li>
       </ul>
-    
-    <li>
-      <h3>En proceso</h3>
-      <ul>
-        {% for user_story in user_stories_proceso %}
-          <li>{{ user_story.nombre }}</li>
-        {% empty %}
-          <li>No hay user stories en proceso</li>
-        {% endfor %}
-      </ul>
-    </li>
-    <li>
-      <h3>Terminadas</h3>
-      <ul>
-        {% for user_story in user_stories_terminado %}
-          <li>{{ user_story.nombre }}</li>
-        {% empty %}
-          <li>No hay user stories terminadas</li>
-        {% endfor %}
-      </ul>
+      <a href="{% url 'gestor:user_story_create' %}" class="dashboard-link">Crear User Story</a>
     </li>
   </ul>
-</li>
   <a href="#" onclick="logout_view()" class="dashboard-link">Cerrar sesión</a>
   <a href="{% url 'gestor:usuario_list' %}" class="dashboard-link">Usuarios</a>
 
@@ -83,9 +71,9 @@
 
 {% endblock %}
 
-
 {% block css %}
-  <style>
+<style>
+  /* Estilos CSS aquí */
   body {
     background-color: #f5f5f5;
     font-family: Arial, sans-serif;
