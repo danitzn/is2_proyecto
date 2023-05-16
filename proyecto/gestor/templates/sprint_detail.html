@@ -44,11 +44,11 @@
                     <td>{{ user_story.id }}</td>
                     <td>{{ user_story.nombre }}</td>
                     <td>{{ user_story.descripcion }}</td>
-                    <td>Hacer</td>
+                    <td>{{ user_story.estado }}</td>
                   </tr>
                 {% empty %}
                   <tr>
-                    <td colspan="4">No hay User Stories en estado "Hacer".</td>
+                    <td colspan="4">No hay User Stories.</td>
                   </tr>
                 {% endfor %}
               </tbody>

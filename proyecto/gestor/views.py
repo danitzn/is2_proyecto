@@ -13,7 +13,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
 from django.contrib.auth.forms import AuthenticationForm
-from .forms import  SprintForm,UserStoryForm, UsuProyRolForm, UsuProyRolFormset, UsuarioCreationForm
+from .forms import  SprintForm, UsuProyRolForm, UsuProyRolFormset, UsuarioCreationForm
 from .forms import UsuarioChangeForm
 from django.contrib.auth import login
 from django.urls import reverse
@@ -58,7 +58,7 @@ class LoginView(FormView):
 # CURD USUARIOS
 # ----------------------------------------------------------
 class UsuarioCreateView(LoginRequiredMixin, CreateView):
-    model = UserStory
+    model = User
     form_class = UsuarioCreationForm
     template_name = 'usuario_create.html'
     success_url = reverse_lazy('gestor:usuario_list')
@@ -95,7 +95,7 @@ class UsuarioListView(LoginRequiredMixin, ListView):
 
 # CURD PROYECTOS
 # ----------------------------------------------------------
-class ProyectoCreateView(FormView):
+class ProyectoCreateView(View):
     template_name = 'proyecto_create.html'
 
     def get(self, request):
@@ -106,7 +106,7 @@ class ProyectoCreateView(FormView):
     def post(self, request):
         proyecto_form = ProyectoForm(request.POST)
         usu_proy_rol_formset = UsuProyRolFormset(request.POST)
-        if usu_proy_rol_formset.is_valid():
+        if proyecto_form.is_valid() and usu_proy_rol_formset.is_valid():
             proyecto = proyecto_form.save()
             for usu_proy_rol_form in usu_proy_rol_formset:
                 usu_proy_rol = usu_proy_rol_form.save(commit=False)
@@ -208,8 +208,6 @@ class SprintDetailView(DetailView):
         context['user_stories'] = user_stories
         proyecto = Proyecto.objects.get(pk=self.object.backlog.pk)
         context['proyecto'] = proyecto
-        print (user_stories)
-        print ('----------')
         return context
     
 
@@ -260,7 +258,8 @@ class DashboardView(TemplateView):
 
         context['sprints'] = sprints
         context['proyectos'] = proyectos
-        context['proyectos_sprints']      = zip(proyectos, sprints)
+        context['proyectos_sprints'] = zip(proyectos, sprints)
+        
         # Get all user stories
         user_stories = UserStory.objects.all()
 
@@ -282,30 +281,3 @@ class DashboardView(TemplateView):
     def logout_view(request):
         logout(request)
         return redirect('login')
-    
-
-    #------------------------------------------------------------
-    #user story
-class UserStoryCreateView(View):
-    template_name = 'user_story_create.html'
-        
-    def get(self, request):
-        user_story_form = UserStoryForm()
-        return render(request, self.template_name, {'user_story_form': user_story_form})
-        
-    def post(self, request):
-        user_story_form = UserStoryForm(request.POST)
-        if user_story_form.is_valid():
-            user_story = user_story_form.save()
-            return redirect('gestor:dashboard')
-        else:
-            return render(request, self.template_name, {'user_story_form': user_story_form})
-            
-        
-
-class UserStoryListDetailView(View):
-    model = UserStory
-    template_name = 'user_story_detail.html'
-    def get(self, request, pk):
-        user_story = get_object_or_404(UserStory, pk=pk)
-        return render(request, self.template_name, {'user_story': user_story})
