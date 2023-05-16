@@ -42,7 +42,12 @@ class UsuProyRol(models.Model):
     rol = models.ForeignKey(Rol, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.nombre
+        return self.usuario.username
+    def get_rol(self):
+        return self.rol.descripcion
+    def get_proyecto(self):
+        return self.proyecto.nombre
+    
 
 
 class Estados(models.Model):
@@ -54,8 +59,7 @@ class Estados(models.Model):
     estado = models.CharField(max_length=10, choices=ESTADOS)
 
     def __str__(self):
-        return self.nombre
-      
+        return self.estado
 
 class UserStory(models.Model):
     nombre = models.CharField(max_length=100)
