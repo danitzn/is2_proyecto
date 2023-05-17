@@ -70,15 +70,15 @@ class SprintUpdateForm(forms.ModelForm):
         model = Sprint
         fields = ('fecha_inicio', 'fecha_fin', 'fecha_fin_prevista', 'duracion')
 
-        
+
 # ----------------------------------------------------------
 # FORMS USER STORY
 # ----------------------------------------------------------
 
 class UserStoryForm(forms.ModelForm):
     sprint = forms.ModelChoiceField(queryset=Sprint.objects.all())
-    estado = forms.ModelChoiceField(queryset=Estados.objects.all())
-    usu_proy_rol = forms.ModelChoiceField(queryset=UsuProyRol.objects.all())
+    estado = forms.ModelChoiceField(queryset=Estados.objects.all(), initial=1)
+    usu_proy_rol = forms.ModelChoiceField(queryset=UsuProyRol.objects.all(), label='Asignar a')
     class Meta:
         model = UserStory
         fields = ('nombre', 'descripcion','usu_proy_rol','sprint','estado')

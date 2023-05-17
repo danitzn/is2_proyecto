@@ -1,6 +1,6 @@
 {% block content %}
 <div class="container">
-  <h1>Crear Sprint</h1>
+  <h1 class="form-title">Crear Sprint</h1>
   <form method="post">
     {% csrf_token %}
     {{ sprint_form.as_p }}

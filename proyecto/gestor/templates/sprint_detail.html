@@ -21,30 +21,21 @@
     <div class="col-md-6">
       <h2 class="form-subtitle">Users Stories</h2>
       <table class="table table-striped">
-        <table class="table table-striped">
           <thead>
             <tr>
-              <th>US</th>
               <th>Nombre</th>
               <th>Descripción</th>
               <th>Estado</th>
+              <th>Usuario</th>
             </tr>
-            <table>
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Nombre</th>
-                  <th>Descripción</th>
-                  <th>Estado</th>
-                </tr>
-              </thead>
+          </thead>
               <tbody>
                 {% for user_story in user_stories%}
                   <tr>
-                    <td>{{ user_story.id }}</td>
                     <td>{{ user_story.nombre }}</td>
                     <td>{{ user_story.descripcion }}</td>
                     <td>{{ user_story.estado }}</td>
+                    <td>{{ user_story.usu_proy_rol }}</td>
                   </tr>
                 {% empty %}
                   <tr>
@@ -52,7 +43,7 @@
                   </tr>
                 {% endfor %}
               </tbody>
-            </table>
+        </table>
         
 
     </div>

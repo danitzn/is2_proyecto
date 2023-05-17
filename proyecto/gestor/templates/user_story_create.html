@@ -1,10 +1,15 @@
 <!-- user_story_create.html -->
 
-<form method="POST">
-    {% csrf_token %}
+
+  <div class="container">
+    <h1 class="form-title">Crear User Story</h1> 
+    <form method="POST">
+      {% csrf_token %}
     {{ user_story_form.as_p }}
     <button type="submit">Crear User Story</button>
+    <a href="{% url 'gestor:dashboard' %}" class="usuario-link">Volver al listado de proyectos</a>
   </form>
+  </div>
   {% block css %}
 <style>
   body {
