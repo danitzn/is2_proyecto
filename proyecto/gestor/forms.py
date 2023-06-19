@@ -79,7 +79,12 @@ class UserStoryForm(forms.ModelForm):
     sprint = forms.ModelChoiceField(queryset=Sprint.objects.all())
     estado = forms.ModelChoiceField(queryset=Estados.objects.all(), initial=1)
     usu_proy_rol = forms.ModelChoiceField(queryset=UsuProyRol.objects.all(), label='Asignar a')
+    story_points = forms.IntegerField(label='Story Points', required=False)
+    definicion_hecho = forms.CharField(label='Definicion de Hecho', required=False)
+    prioridad = forms.IntegerField(label='Prioridad', required=False)
+    fecha_inicio = forms.DateField(widget=DateInput(attrs={'type': 'date'}), required=False)
+    fecha_fin = forms.DateField(widget=DateInput(attrs={'type': 'date'}), required=False)
+
     class Meta:
         model = UserStory
-        fields = ('nombre', 'descripcion','usu_proy_rol','sprint','estado')
-        UserStoryFormset = formset_factory(UserStory, extra=4)
+        fields = ('nombre', 'descripcion','usu_proy_rol','sprint','estado','story_points','definicion_hecho','prioridad','fecha_inicio','fecha_fin')

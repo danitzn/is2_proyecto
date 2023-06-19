@@ -1,6 +1,5 @@
-
+{% extends 'base.html' %}
 {% block content %}
-<div class="container">
   <h1 class="form-title">Detalle del Proyecto</h1>
   <div class="row">
     <div class="col-md-6">
@@ -38,7 +37,6 @@
   </div>
   <a href="{% url 'gestor:proyecto_update' proyecto.pk %}" class="usuario-link">Editar</a>
   <a href="{% url 'gestor:dashboard' %}" class="usuario-link">Volver al listado de proyectos</a>
-</div>
 {% endblock %}
 
 {% block css %}

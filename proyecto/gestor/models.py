@@ -49,24 +49,30 @@ class UsuProyRol(models.Model):
         return self.proyecto.nombre
     
 
-
 class Estados(models.Model):
     ESTADOS = (
         ('hacer', 'Por hacer'),
         ('proceso', 'En proceso'),
         ('terminado', 'Terminado'),
+        ('cancelado', 'Cancelado')
     )
     estado = models.CharField(max_length=10, choices=ESTADOS)
 
     def __str__(self):
         return self.estado
+    
 
 class UserStory(models.Model):
     nombre = models.CharField(max_length=100)
     descripcion = models.CharField(max_length=500)
-    sprint = models.ForeignKey(Sprint, on_delete=models.CASCADE)
+    sprint = models.ForeignKey(Sprint, on_delete=models.CASCADE, null=True, blank=True)
     usu_proy_rol = models.ForeignKey(UsuProyRol, on_delete=models.CASCADE)
     estado = models.ForeignKey(Estados, on_delete=models.CASCADE)
+    story_points = models.IntegerField(null=True, blank=True)
+    definicion_hecho = models.CharField(max_length=500, null=True, blank=True)
+    prioridad = models.IntegerField(null=True, blank=True)
+    fecha_inicio = models.DateField(null=True, blank=True)
+    fecha_fin = models.DateField(null=True, blank=True)
 
     def __str__(self):
         return self.nombre
@@ -96,5 +102,8 @@ def create_estados(sender, **kwargs):
         
         if not Estados.objects.filter(estado='terminado').exists():
             Estados.objects.create(estado='terminado')
+
+        if not Estados.objects.filter(estado='cancelado').exists():
+            Estados.objects.create(estado='cancelado')
         
         os.environ['ESTADOS_CREATED'] = 'True'

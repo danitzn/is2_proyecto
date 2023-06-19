@@ -1,0 +1,66 @@
+{% block content %}
+  <div class="container">
+    <h1 class="us-title">{{ user_story.nombre }}</h1>
+    <div class="us-info">
+        <p><strong>Nombre:</strong> {{ user_story.nombre }}</p>
+        <p><strong>Descripcion:</strong> {{ user_story.descripcion }}</p>
+        <p><strong>Sprint:</strong> {{ user_story.sprint }}</p>
+        <p><strong>Usuario:</strong> {{ user_story.usu_proy_rol }}</p>
+        <p><strong>Estado:</strong> {{ user_story.estado }}</p>
+        <p><strong>Story Points:</strong> {{ user_story.story_points }}</p>
+        <p><strong>Definicion del Hecho:</strong> {{ user_story.definicion_hecho }}</p>
+        <p><strong>Prioridad:</strong> {{ user_story.prioridad }}</p>
+        <p><strong>Fecha de inicio:</strong> {{ user_story.fecha_inicio }}</p>
+        <p><strong>Fecha Fin:</strong> {{ user_story.fecha_fin }}</p>
+    </div>
+    <a class="dashboard-link" href="{% url 'gestor:user_story_update' user_story.pk %}">Editar</a>
+    <a href="{% url 'gestor:dashboard' %}" class="dashboard-link">Volver al dashboard</a>
+    
+  </div>
+
+  {% block css %}
+    <style>
+      body {
+        background-color: #f5f5f5;
+        font-family: Arial, sans-serif;
+        font-size: 1rem;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 2rem;
+        background-color: #fff;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .us-title {
+        font-size: 2.5rem;
+        margin-top: 0;
+        text-align: center;
+        color: #007bff;
+      }
+
+      .us-info {
+        margin-top: 2rem;
+      }
+
+      .us-info p {
+        margin: 0;
+      }
+
+      .dashboard-link {
+        display: block;
+        margin-top: 2rem;
+        text-align: center;
+        font-size: 1.2rem;
+        color: #007bff;
+        text-decoration: none;
+      }
+
+      .dashboard-link:hover {
+        color: #0056b3;
+      }
+    </style>
+  {% endblock %}
+{% endblock %}

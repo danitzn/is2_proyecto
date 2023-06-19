@@ -7,11 +7,6 @@
         {{ form.as_p }}
         <button type="submit">Guardar cambios</button>
         </form>
-        <div class="usuario-info">
-        <p><strong>Nombre:</strong> {{ object.first_name }} {{ object.last_name }}</p>
-        <p><strong>Email:</strong> {{ object.email }}</p>
-        <p><strong>Fecha de creación:</strong> {{ object.date_joined }}</p>
-        </div>
         <a class="usuario-link" href="{% url 'gestor:usuario_detail' object.pk %}">Ver perfil completo</a>
   </div>
   {% block css %}

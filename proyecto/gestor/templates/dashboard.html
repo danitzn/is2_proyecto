@@ -1,42 +1,21 @@
+{% extends 'base.html' %}
+
 {% block content %}
 
-<div class="container">
-
-  <h1 class="dashboard-title">Inicio</h1>
 
   <p class="dashboard-subtitle">Bienvenido(a), {{ request.user.username }}!</p>
 
   <ul class="dashboard-list">
-    <li>
-      <h3>Proyectos</h3>
-      <ul>
-        {% for proyecto, sprint in proyectos_sprints %}
-          <li>
-            <span><a href="{% url 'gestor:proyecto_detail' proyecto.pk %}">{{ proyecto.nombre }}</a></span>
-            {% if sprint %}
-              <span class="sprint-link-wrapper"><a href="{% url 'gestor:sprint_detail' proyecto.pk sprint.pk %}" class="sprint-link">Ver Sprint</a></span>
-            {% else %}
-              <span class="sprint-link-wrapper"><a href="{% url 'gestor:sprint_create' proyecto.pk %}" class="sprint-link">Crear Sprint</a></span>
-            {% endif %}
-          </li>
-        {% empty %}
-          <li>No hay proyectos disponibles</li>
-        {% endfor %}
-        <li>
-          <a href="{% url 'gestor:proyecto_create' %}" class="dashboard-link">Crear proyecto</a>
-        </li>
-      </ul>
-    </li>
-    <li>
+    
       <h3>User stories</h3>
       <ul>
         <li>
           <h3>Por hacer</h3>
           <ul>
             {% for user_story in user_stories_hacer %}
-              <li>{{ user_story.nombre }}</li>
+              <li><i class="fa-solid fa-check" style="margin-right:4px;"></i><a href="{% url 'gestor:user_story_detail_detail' user_story.pk %}">{{ user_story.nombre }}</a></li>
             {% empty %}
-              <li>No hay user stories por hacer</li>
+              <li>- No hay user stories por hacer -</li>
             {% endfor %}
           </ul>
         </li>
@@ -44,9 +23,9 @@
           <h3>En proceso</h3>
           <ul>
             {% for user_story in user_stories_proceso %}
-              <li>{{ user_story.nombre }}</li>
+            <li<i class="fa-solid fa-check" style="margin-right:4px;"></i>><a href="{% url 'gestor:user_story_detail_detail' user_story.pk %}">{{ user_story.nombre }}</a></li>
             {% empty %}
-              <li>No hay user stories en proceso</li>
+            <li>- No hay user stories por hacer -</li>
             {% endfor %}
           </ul>
         </li>
@@ -54,9 +33,9 @@
           <h3>Terminadas</h3>
           <ul>
             {% for user_story in user_stories_terminado %}
-              <li>{{ user_story.nombre }}</li>
+            <li><i class="fa-solid fa-check" style="margin-right:4px;"></i><a href="{% url 'gestor:user_story_detail_detail' user_story.pk %}">{{ user_story.nombre }}</a></li>
             {% empty %}
-              <li>No hay user stories terminadas</li>
+            <li>- No hay user stories por hacer -</li>
             {% endfor %}
           </ul>
         </li>
@@ -64,41 +43,20 @@
       <a href="{% url 'gestor:user_story_create' %}" class="dashboard-link">Crear User Story</a>
     </li>
   </ul>
-  <a href="#" onclick="logout_view()" class="dashboard-link">Cerrar sesión</a>
-  <a href="{% url 'gestor:usuario_list' %}" class="dashboard-link">Usuarios</a>
 
-</div>
 
 {% endblock %}
 
 {% block css %}
 <style>
   /* Estilos CSS aquí */
-  body {
-    background-color: #f5f5f5;
-    font-family: Arial, sans-serif;
-    font-size: 1rem;
-  }
-
-  .container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 2rem;
-    background-color: #fff;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-  }
-
-  .dashboard-title {
-    font-size: 2.5rem;
-    margin-top: 0;
-    text-align: center;
-    color: #007bff;
-  }
 
   .dashboard-subtitle {
     font-size: 1.5rem;
+    font-weight: bold;
     margin-top: 2rem;
     text-align: center;
+    color: #7e7e7e;
   }
 
   .dashboard-list {
@@ -108,49 +66,42 @@
   .dashboard-list li {
     margin-bottom: 1rem;
     padding: 0.5rem;
-    border: 1px solid #007bff;
     border-radius: 5px;
     background-color: #f5f5f5;
+    color: #7e7e7e;
   }
 
   .dashboard-list h3 {
     font-size: 1.2rem;
     margin-bottom: 1rem;
+    color: #7e7e7e;
+    font-weight: normal;
   }
 
   .dashboard-list p {
     margin: 0;
   }
 
-  .dashboard-list ul {
-    list-style: none;
-    padding-left: 0;
-  }
+.dashboard-list ul {
+  list-style: none;
+  padding-left: 0;
+}
 
-  .dashboard-list li:hover {
-    background-color: #007bff;
-    color: #fff;
-  }
+.dashboard-link {
+  display: block;
+  margin-top: 2rem;
+  text-align: center;
+  font-size: 1.2rem;
+  color: #007bff;
+  text-decoration: none;
+}
 
-  .dashboard-link {
-    display: block;
-    margin-top: 2rem;
-    text-align: center;
-    font-size: 1.2rem;
-    color: #007bff;
-    text-decoration: none;
-  }
-
-  .dashboard-link:hover {
-    color: #0056b3;
-  }
-
-  .sprint-link-wrapper {
-    float: right;
-    margin-left: 10px;
-    font-size: 0.8rem;
-    color: #007bff;
-    text-decoration: none;
-  }
-  </style>
+.sprint-link-wrapper {
+  float: right;
+  margin-left: 10px;
+  font-size: 0.8rem;
+  color: #007bff;
+  text-decoration: none;
+}
+</style>
 {% endblock %}

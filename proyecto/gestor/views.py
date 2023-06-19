@@ -80,6 +80,7 @@ class UsuarioDeleteView(LoginRequiredMixin, DeleteView):
 class UsuarioDetailView(LoginRequiredMixin, DetailView):
     model = User
     template_name = 'usuario_detail.html'
+    
 
 class UsuarioListView(LoginRequiredMixin, ListView):
     model = User
@@ -300,7 +301,6 @@ class UserStoryCreateView(View):
         else:
             return render(request, self.template_name, {'user_story_form': user_story_form})
             
-        
 
 class UserStoryListDetailView(View):
     model = UserStory
@@ -308,3 +308,40 @@ class UserStoryListDetailView(View):
     def get(self, request, pk):
         user_story = get_object_or_404(UserStory, pk=pk)
         return render(request, self.template_name, {'user_story': user_story})
+    
+class UserStoryDetailView(LoginRequiredMixin, DetailView):
+    model = UserStory
+    template_name = 'user_story_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user_story = UserStory.objects.get(pk=self.object.pk)
+        context['user_story'] = user_story
+        return context
+    
+
+class UserStoryUpdateView(LoginRequiredMixin, UpdateView):
+    model = UserStory
+    template_name = 'userstory_update.html'
+    fields = ['nombre', 'descripcion','usu_proy_rol','sprint','estado','story_points','definicion_hecho','prioridad','fecha_inicio','fecha_fin']
+    
+    def get_object(self, queryset=None):
+        # Recuperar el objeto específico que se va a editar
+        pk = self.kwargs['pk']
+        obj = get_object_or_404(UserStory, pk=pk)
+        # Aquí puedes aplicar cualquier lógica adicional para filtrar o modificar el objeto si es necesario
+        return obj
+    
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        pk = self.object.pk
+        success_url = reverse_lazy('gestor:user_story_detail_detail', kwargs={'pk': pk})
+        self.object.save()
+
+        return HttpResponseRedirect(success_url)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user_story = UserStory.objects.get(pk=self.object.pk)
+        context['user_story'] = user_story
+        return context
